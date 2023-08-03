@@ -1,0 +1,406 @@
+{
+  "name": "mongodb_replica_member_unhealthy_incident",
+  "description": "This incident type refers to an issue with a MongoDB replica set, where one or more members of the set have been marked as unhealthy. This can happen due to various causes, such as network issues, hardware failures, or configuration problems. When this occurs, it can impact the availability and performance of the database system, which can lead to data loss or corruption. Prompt resolution of this incident is necessary to prevent further damage and restore the normal functioning of the replica set.",
+  "params": [
+    {
+      "name": "PATH_TO_CONFIG_FILE",
+      "value": ""
+    },
+    {
+      "name": "REPLICA_SET_MEMBERS",
+      "value": ""
+    },
+    {
+      "name": "MEMBER_HOSTNAME",
+      "value": ""
+    },
+    {
+      "name": "REPLICA_SET_NAME",
+      "value": ""
+    },
+    {
+      "name": "REPLICA_SET_PRIORITIES",
+      "value": ""
+    },
+    {
+      "name": "HOST_NAME",
+      "value": ""
+    },
+    {
+      "name": "K8S_CLUSTER_NAME",
+      "value": ""
+    },
+    {
+      "name": "NAMESPACE",
+      "value": ""
+    }
+  ],
+  "cells": [
+    {
+      "name": "cell_1",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## MongoDB replica member unhealthy incident.\nThis incident type refers to an issue with a MongoDB replica set, where one or more members of the set have been marked as unhealthy. This can happen due to various causes, such as network issues, hardware failures, or configuration problems. When this occurs, it can impact the availability and performance of the database system, which can lead to data loss or corruption. Prompt resolution of this incident is necessary to prevent further damage and restore the normal functioning of the replica set."
+    },
+    {
+      "name": "cell_2",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check if MongoDB is running"
+    },
+    {
+      "name": "cell_3",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `systemctl status mongod`"
+    },
+    {
+      "name": "cell_4",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the replica set status"
+    },
+    {
+      "name": "cell_5",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"rs.status()\"`"
+    },
+    {
+      "name": "cell_6",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the replica set configuration"
+    },
+    {
+      "name": "cell_7",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"rs.conf()\"`"
+    },
+    {
+      "name": "cell_8",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the replica set members"
+    },
+    {
+      "name": "cell_9",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"rs.isMaster()\"`"
+    },
+    {
+      "name": "cell_10",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Get the MongoDB log file"
+    },
+    {
+      "name": "cell_11",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `tail -f /var/log/mongodb/mongod.log`"
+    },
+    {
+      "name": "cell_12",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the disk usage"
+    },
+    {
+      "name": "cell_13",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `df -h`"
+    },
+    {
+      "name": "cell_14",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the memory usage"
+    },
+    {
+      "name": "cell_15",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `free -h`"
+    },
+    {
+      "name": "cell_16",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB process ID"
+    },
+    {
+      "name": "cell_17",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `pgrep mongod`"
+    },
+    {
+      "name": "cell_18",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the CPU usage"
+    },
+    {
+      "name": "cell_19",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `top`"
+    },
+    {
+      "name": "cell_20",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB replica set members status"
+    },
+    {
+      "name": "cell_21",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"rs.status().members\"`"
+    },
+    {
+      "name": "cell_22",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB replica set members health"
+    },
+    {
+      "name": "cell_23",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"rs.status().members.forEach(function(member) { print(member.name + ' is ' + member.stateStr); })\"`"
+    },
+    {
+      "name": "cell_24",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB replica set members state"
+    },
+    {
+      "name": "cell_25",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"rs.status().members.forEach(function(member) { print(member.name + ' is ' + member.stateStr); })\"`"
+    },
+    {
+      "name": "cell_26",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB version"
+    },
+    {
+      "name": "cell_27",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"db.version()\"`"
+    },
+    {
+      "name": "cell_28",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB storage engine"
+    },
+    {
+      "name": "cell_29",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"db.serverStatus().storageEngine\"`"
+    },
+    {
+      "name": "cell_30",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB memory usage"
+    },
+    {
+      "name": "cell_31",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"db.serverStatus().mem\"`"
+    },
+    {
+      "name": "cell_32",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB network usage"
+    },
+    {
+      "name": "cell_33",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"db.serverStatus().network\"`"
+    },
+    {
+      "name": "cell_34",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB oplog size"
+    },
+    {
+      "name": "cell_35",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"db.getReplicationInfo().logSizeMB\"`"
+    },
+    {
+      "name": "cell_36",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB oplog window"
+    },
+    {
+      "name": "cell_37",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"db.getReplicationInfo().timeDiff\"`"
+    },
+    {
+      "name": "cell_38",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB oplog length"
+    },
+    {
+      "name": "cell_39",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"db.getReplicationInfo().oplogLength\"`"
+    },
+    {
+      "name": "cell_40",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB oplog utilization"
+    },
+    {
+      "name": "cell_41",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"db.getReplicationInfo().usedMB\"`"
+    },
+    {
+      "name": "cell_42",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB oplog capacity"
+    },
+    {
+      "name": "cell_43",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"db.getReplicationInfo().totalMB\"`"
+    },
+    {
+      "name": "cell_44",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB oplog status"
+    },
+    {
+      "name": "cell_45",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"db.printReplicationInfo()\"`"
+    },
+    {
+      "name": "cell_46",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB oplog sync status"
+    },
+    {
+      "name": "cell_47",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"rs.printSlaveReplicationInfo()\"`"
+    },
+    {
+      "name": "cell_48",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB oplog lag time"
+    },
+    {
+      "name": "cell_49",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"rs.printSlaveReplicationInfo().syncMillis\"`"
+    },
+    {
+      "name": "cell_50",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB oplog sync source"
+    },
+    {
+      "name": "cell_51",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"rs.printSlaveReplicationInfo().source\"`"
+    },
+    {
+      "name": "cell_52",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the MongoDB oplog sync state"
+    },
+    {
+      "name": "cell_53",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `mongo --eval \"rs.printSlaveReplicationInfo().state\"`"
+    },
+    {
+      "name": "cell_54",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Define the IP addresses of the MongoDB replica members"
+    },
+    {
+      "name": "cell_55",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "host | host_name=$HOST_NAME | invoke_config_script()"
+    },
+    {
+      "name": "cell_56",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the network connectivity between MongoDB replica members"
+    },
+    {
+      "name": "cell_57",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "host | host_name=$HOST_NAME | invoke_mongodb_network_check()"
+    },
+    {
+      "name": "cell_58",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Verify the MongoDB configuration file for replica set configuration and ensure that it has correct replica set name, members list, and priority settings."
+    },
+    {
+      "name": "cell_59",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "host | host_name=$HOST_NAME | invoke_config_replica_set($REPLICA_SET_MEMBERS, $REPLICA_SET_NAME, $REPLICA_SET_PRIORITIES)"
+    },
+    {
+      "name": "cell_60",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Restart the MongoDB replica set members one by one to ensure that the latest data is replicated to all members and the issue is resolved."
+    },
+    {
+      "name": "cell_61",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "host | host_name=$HOST_NAME | invoke_restart_replica_set_members()"
+    }
+  ]
+}
